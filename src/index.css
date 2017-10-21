@@ -4,7 +4,7 @@ body {
   font-family: sans-serif;
 }
 
-input {
+input, button {
   margin: 15px;
   color: black
 }

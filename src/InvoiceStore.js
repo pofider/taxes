@@ -1,4 +1,5 @@
-import { observable, action, computed, Atom, reaction } from 'mobx'
+import { observable, action, computed, toJS, autorun, runInAction } from 'mobx'
+import { observer } from 'mobx-react'
 import { asyncComputed } from 'computed-async-mobx'
 import { addDays } from './utils.js'
 
@@ -107,6 +108,33 @@ export class Store {
     @action.bound
     addInvoiceCZ () {
       this.invoicesCZ.push(new Invoice())
+    }
+
+    @observer @action.bound
+    async createTaxes () {
+      console.log(this.gumroad[0].amountCZK)
+      const body = JSON.stringify({
+        gumroad: this.gumroad.map((g) => ({
+          amount: g.amount,
+          amountCZK: g.amountCZK.get(),
+          date: g.date
+        })),
+        fee: {
+          date: this.fee.date,
+          amountCZK: this.fee.amountCZK.get()
+        },
+        invoicesCZ: this.invoicesCZ
+      })
+
+      const res = await fetch('api/taxes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: body
+      })
+
+      alert((await res.text()))
     }
 
     constructor () {

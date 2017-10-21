@@ -20,6 +20,9 @@ class App extends Component {
         <Fee fee={this.props.store.fee} />
         <Peru peru={this.props.store.peru} />
         <InvoicesCZ invoices={this.props.store.invoicesCZ} add={this.props.store.addInvoiceCZ} />
+        <div>
+          !!!<button onClick={this.props.store.createTaxes}>Create taxes input</button>!!!
+        </div>
       </div>
     )
   }
