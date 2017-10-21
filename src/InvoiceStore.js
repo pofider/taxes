@@ -145,7 +145,12 @@ export class Store {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          gumroad: this.gumroad.toJS(),
+          gumroad: this.gumroad.map((g) => ({
+            id: g.id,
+            amount: g.amount,
+            amountCZK: g.amountCZK,
+            date: g.date
+          })),
           fee: {
             amount: this.fee.amount,
             amountCZK: this.fee.amountCZK,
