@@ -6,9 +6,9 @@ export default observer(({ fee, gumroad }) => <div>
 
   <div>
     <label>Date</label>
-    <input type='text' value={fee.date.toLocaleDateString('cz')} />
-    <label>Amount</label>
-    <input type='text' value={fee.amountCZK.get()} />
+    <input disabled type='text' value={fee.date.toLocaleDateString('cz')} />
+    <label>CZK</label>
+    <input disabled type='text' value={fee.amountCZK.get()} />
   </div>
 
 </div>)

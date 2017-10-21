@@ -20,6 +20,7 @@ class Gumroad {
     constructor (id, date) {
       this.id = id
       this.date = date
+      this.amount = 0
     }
 }
 
@@ -32,17 +33,45 @@ class Fee {
     console.log(this.gumroadSumCZK)
   }
 
-  amountCZK = asyncComputed(0, 500, async () => {
+  amountCZK = asyncComputed(0, 100, async () => {
     return Math.round(this.gumroadSumCZK.get() * 0.23)
   })
+}
+
+class Peru {
+  @observable dateStr
+  @observable amount
+
+  @computed get date () {
+    try {
+      return new Date(this.dateStr)
+    } catch (e) {
+      return new Date()
+    }
+  }
+
+  constructor () {
+    this.dateStr = new Date().toLocaleDateString('cz')
+    this.amount = 0
+  }
+}
+
+class Invoice {
+  @observable amount
+
+  constructor () {
+    this.amount = 0
+  }
 }
 
 const initialDate = new Date(2017, 7 - 1, 7)
 export class Store {
     @observable gumroad
     @observable fee
+    @observable peru
+    @observable invoicesCZ
 
-    gumroadSumCZK = asyncComputed(0, 500, async () => {
+    gumroadSumCZK = asyncComputed(0, 100, async () => {
       let sumAmount = 0
       for (let g of this.gumroad) {
         if (g.amountCZK.get()) {
@@ -75,9 +104,16 @@ export class Store {
       }
     }
 
+    @action.bound
+    addInvoiceCZ () {
+      this.invoicesCZ.push(new Invoice())
+    }
+
     constructor () {
       this.gumroad = []
       this.fee = new Fee(this.gumroadSumCZK)
+      this.peru = new Peru()
+      this.invoicesCZ = []
     }
 }
 
