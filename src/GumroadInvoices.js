@@ -9,7 +9,7 @@ export default observer(({ gumroad, gumroadSumCZK }) => (
       {gumroad.map((g) => <GumroadInvoice item={g} />)}
     </div>
     <div>
-      <h4>Total incomes: {gumroadSumCZK.get().toFixed()} CZK</h4>
+      <h4>Total incomes: {gumroadSumCZK.toFixed()} CZK</h4>
     </div>
   </div>
 ))

@@ -1,47 +1,53 @@
-import { observable, action, computed, toJS, autorun, runInAction } from 'mobx'
+import { observable, action, computed, toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { asyncComputed } from 'computed-async-mobx'
-import { addDays } from './utils.js'
+import { addDays, formatCZDate } from './utils.js'
+import conversion from './conversion.js'
 
 class Gumroad {
     @observable id
-    @observable amount
+    @observable amountStr
     @observable date
+    @observable amountCZK
 
-    amountCZK = asyncComputed(0, 500, async () => {
-      if (!this.amount) {
+    @computed get amount () {
+      try {
+        return parseFloat(this.amountStr)
+      } catch (e) {
         return 0
       }
+    }
 
-      const response = await fetch(`api/czk/${this.date}`)
-      const quotation = await response.json()
-      return parseFloat((quotation * this.amount).toFixed(2))
-    })
+    @action.bound
+    updateAmount (amount) {
+      this.amountStr = amount
+      this.amountCZK = 100
+
+      conversion(this)
+    }
 
     constructor (id, date) {
       this.id = id
       this.date = date
-      this.amount = 0
     }
 }
 
 class Fee {
   @observable date
 
+  @computed get amountCZK () {
+    return Math.round(this.gumroadSumCZK() * 0.23)
+  }
+
   constructor (gumroadSumCZK) {
     this.date = new Date()
     this.gumroadSumCZK = gumroadSumCZK
-    console.log(this.gumroadSumCZK)
   }
-
-  amountCZK = asyncComputed(0, 100, async () => {
-    return Math.round(this.gumroadSumCZK.get() * 0.23)
-  })
 }
 
 class Peru {
   @observable dateStr
-  @observable amount
+  @observable amountCZK
+  @observable amountStr
 
   @computed get date () {
     try {
@@ -51,9 +57,30 @@ class Peru {
     }
   }
 
+  @computed get amount () {
+    try {
+      return parseFloat(this.amountStr)
+    } catch (e) {
+      return 0
+    }
+  }
+
+  @action.bound
+  async updateAmount (amount) {
+    this.amountStr = amount
+
+    conversion(this)
+  }
+
+  @action.bound
+  async updateDate (date) {
+    this.dateStr = date
+
+    conversion(this)
+  }
+
   constructor () {
-    this.dateStr = new Date().toLocaleDateString('cz')
-    this.amount = 0
+    this.dateStr = formatCZDate(new Date())
   }
 }
 
@@ -72,16 +99,16 @@ export class Store {
     @observable peru
     @observable invoicesCZ
 
-    gumroadSumCZK = asyncComputed(0, 100, async () => {
+    @computed get gumroadSumCZK () {
       let sumAmount = 0
       for (let g of this.gumroad) {
-        if (g.amountCZK.get()) {
-          sumAmount += g.amountCZK.get()
+        if (g.amountCZK) {
+          sumAmount += g.amountCZK
         }
       }
 
       return sumAmount
-    })
+    }
 
     @action
     initialize () {
@@ -110,39 +137,34 @@ export class Store {
       this.invoicesCZ.push(new Invoice())
     }
 
-    @observer @action.bound
+     @action.bound
     async createTaxes () {
-      console.log(this.gumroad[0].amountCZK)
-      const body = JSON.stringify({
-        gumroad: this.gumroad.map((g) => ({
-          amount: g.amount,
-          amountCZK: g.amountCZK.get(),
-          date: g.date
-        })),
-        fee: {
-          date: this.fee.date,
-          amountCZK: this.fee.amountCZK.get()
-        },
-        invoicesCZ: this.invoicesCZ
-      })
-
       const res = await fetch('api/taxes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: body
+        body: JSON.stringify({
+          gumroad: this.gumroad.toJS(),
+          fee: {
+            amount: this.fee.amount,
+            amountCZK: this.fee.amountCZK,
+            date: this.fee.date,
+            dateStr: this.fee.dateStr
+          },
+          invoicesCZ: this.invoicesCZ.toJS()
+        })
       })
 
       alert((await res.text()))
     }
 
-    constructor () {
-      this.gumroad = []
-      this.fee = new Fee(this.gumroadSumCZK)
-      this.peru = new Peru()
-      this.invoicesCZ = []
-    }
+     constructor () {
+       this.gumroad = []
+       this.fee = new Fee(() => this.gumroadSumCZK)
+       this.peru = new Peru()
+       this.invoicesCZ = []
+     }
 }
 
 export default window.store = new Store()

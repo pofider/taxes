@@ -7,6 +7,8 @@
     "koa": "2.3.0",
     "koa-bodyparser": "4.2.0",
     "koa-router": "7.2.1",
+    "lodash.debounce": "4.0.8",
+    "mobx-utils": "3.2.1",
     "moment": "2.19.1",
     "node-fetch": "1.7.3",
     "react-app-rewire-mobx": "1.0.7",
