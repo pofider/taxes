@@ -51,7 +51,8 @@ class Peru {
 
   @computed get date () {
     try {
-      return new Date(this.dateStr)
+      const fragments = this.dateStr.split('.')
+      return new Date(parseInt(fragments[2]), parseInt(fragments[1]) - 1, parseInt(fragments[0]))
     } catch (e) {
       return new Date()
     }
@@ -137,7 +138,7 @@ export class Store {
       this.invoicesCZ.push(new Invoice())
     }
 
-     @action.bound
+    @action.bound
     async createTaxes () {
       const res = await fetch('api/taxes', {
         method: 'POST',
@@ -154,8 +155,12 @@ export class Store {
           fee: {
             amount: this.fee.amount,
             amountCZK: this.fee.amountCZK,
-            date: this.fee.date,
-            dateStr: this.fee.dateStr
+            date: this.fee.date
+          },
+          peru: {
+            amount: this.peru.amount,
+            amountCZK: this.peru.amountCZK,
+            date: this.peru.date
           },
           invoicesCZ: this.invoicesCZ.toJS()
         })
@@ -164,12 +169,12 @@ export class Store {
       alert((await res.text()))
     }
 
-     constructor () {
-       this.gumroad = []
-       this.fee = new Fee(() => this.gumroadSumCZK)
-       this.peru = new Peru()
-       this.invoicesCZ = []
-     }
+    constructor () {
+      this.gumroad = []
+      this.fee = new Fee(() => this.gumroadSumCZK)
+      this.peru = new Peru()
+      this.invoicesCZ = []
+    }
 }
 
 export default window.store = new Store()
