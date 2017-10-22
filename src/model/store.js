@@ -1,5 +1,4 @@
-import { observable, extendObservable, action, computed } from 'mobx'
-import { addDays } from '../utils.js'
+import { observable, action, toJS } from 'mobx'
 import Invoice from './invoice.js'
 import Fee from './fee.js'
 import Gumroad from './gumroad.js'
@@ -9,10 +8,22 @@ export class Store {
     @observable fee
     @observable peru
     @observable invoicesCZ
+    @observable invoicesEU
+    @observable invoicesUS
 
     @action.bound
     addInvoiceCZ () {
       this.invoicesCZ.push(Invoice())
+    }
+
+    @action.bound
+    addInvoiceEU () {
+      this.invoicesEU.push(Invoice())
+    }
+
+    @action.bound
+    addInvoiceUS () {
+      this.invoicesUS.push(Invoice())
     }
 
     @action.bound
@@ -23,25 +34,12 @@ export class Store {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          gumroad: this.gumroad.map((g) => ({
-            id: g.id,
-            amount: g.amount,
-            amountCZK: g.amountCZK,
-            date: g.date
-          })),
-          fee: {
-            amount: this.fee.amount,
-            amountCZK: this.fee.amountCZK,
-            date: this.fee.date
-          },
-          peru: {
-            amount: this.peru.amount,
-            amountCZK: this.peru.amountCZK,
-            date: this.peru.date
-          },
+          gumroad: this.gumroad.toJS(),
+          fee: this.fee.toJS(),
+          peru: toJS(this.peru),
           invoicesCZ: this.invoicesCZ.toJS(),
-          invoicesThird: this.incoicesThird.toJS(),
-          invoicesEU: this.incoicesEU.toJS()
+          invoicesUS: this.invoicesUS.toJS(),
+          invoicesEU: this.invoicesEU.toJS()
         })
       })
 
@@ -52,7 +50,9 @@ export class Store {
       this.gumroad = Gumroad()
       this.fee = Fee(() => this.gumroad.incomes)
       this.peru = Invoice()
+      this.invoicesUS = []
       this.invoicesCZ = []
+      this.invoicesEU = []
     }
 }
 

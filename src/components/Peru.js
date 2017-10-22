@@ -10,7 +10,7 @@ export default observer(({ peru }) => <div>
     <label>CZK</label>
     <input disabled type='text' value={peru.amountCZK} onChange={(ev) => (peru.amountCZK = ev.target.value)} />
     <label style={{color: 'red'}}>USD</label>
-    <input type='text' value={peru.amountStr} onChange={(ev) => (peru.updateAmount(ev.target.value))} />
+    <input type='text' value={peru.amountStrUSD} onChange={(ev) => (peru.updateAmountUSD(ev.target.value))} />
   </div>
 
 </div>)

@@ -1,10 +1,22 @@
 import { formatCZDate } from '../utils.js'
 import conversion from './conversion.js'
 
+function safeParse (str) {
+  try {
+    return parseFloat(str)
+  } catch (e) {
+    return 0
+  }
+}
+
 export default (id, date) => ({
-  amountStr: '0',
+  amountStrCZK: '0',
+  amountStrUSD: '0',
+  amountStrEUR: '0',
   dateStr: formatCZDate(date || new Date()),
   amountCZK: 0,
+  amountUSD: 0,
+  amountEUR: 0,
   id: id,
   get date () {
     try {
@@ -14,17 +26,19 @@ export default (id, date) => ({
       return new Date()
     }
   },
-  get amount () {
-    try {
-      return parseFloat(this.amountStr)
-    } catch (e) {
-      return 0
-    }
-  },
-  updateAmount (amount) {
-    this.amountStr = amount
-
+  updateAmountUSD (amount) {
+    this.amountStrUSD = amount
+    this.amountUSD = safeParse(amount)
     conversion(this)
+  },
+  updateAmountEUR (amount) {
+    this.amountStrEUR = amount
+    this.amountEUR = safeParse(amount)
+    conversion(this)
+  },
+  updateAmountCZK (amount) {
+    this.amountStrCZK = amount
+    this.amountCZK = safeParse(amount)
   },
   updateDate (date) {
     this.dateStr = date

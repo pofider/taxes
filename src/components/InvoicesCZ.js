@@ -6,8 +6,10 @@ export default observer(({ invoices, add }) => <div>
   <button onClick={add}>Add invoice</button>
   {invoices.map((i) =>
     <div>
-      <label>Amount</label>
-      <input type='text' style={{color: 'red'}} value={i.amount} onChange={(ev) => (i.amount = ev.target.value)} />
+      <label>Date</label>
+      <input type='text' style={{color: 'red'}} value={i.dateStr} onChange={(ev) => i.updateDate(ev.target.value)} />
+      <label>CZK</label>
+      <input type='text' style={{color: 'red'}} value={i.amountStrCZ} onChange={(ev) => i.updateAmountCZK(ev.target.value)} />
     </div>
   )}
 
