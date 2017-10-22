@@ -1,4 +1,4 @@
-import { formatCZDate } from './utils'
+import { formatCZDate } from '../utils'
 
 const cache = {}
 export default async function (obj) {
