@@ -17,15 +17,10 @@ export default (id, date) => ({
   amountCZK: 0,
   amountUSD: 0,
   amountEUR: 0,
+  dic: '',
+  date: date || new Date(),
   id: id,
-  get date () {
-    try {
-      const fragments = this.dateStr.split('.')
-      return new Date(parseInt(fragments[2]), parseInt(fragments[1]) - 1, parseInt(fragments[0]))
-    } catch (e) {
-      return new Date()
-    }
-  },
+
   updateAmountUSD (amount) {
     this.amountStrUSD = amount
     this.amountUSD = safeParse(amount)
@@ -40,9 +35,29 @@ export default (id, date) => ({
     this.amountStrCZK = amount
     this.amountCZK = safeParse(amount)
   },
+  updateDIC (dic) {
+    this.dic = dic
+  },
   updateDate (date) {
     this.dateStr = date
 
+    try {
+      const fragments = date.split('.')
+      this.date = new Date(parseInt(fragments[2]), parseInt(fragments[1]) - 1, parseInt(fragments[0]))
+    } catch (e) {
+      this.date = new Date()
+    }
+
     conversion(this)
+  },
+  toJS () {
+    return {
+      amountCZK: this.amountCZK,
+      amountUSD: this.amountUSD,
+      amountEUR: this.amountEUR,
+      date: this.date,
+      dic: this.dic,
+      id: this.id
+    }
   }
 })

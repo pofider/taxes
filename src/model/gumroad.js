@@ -37,12 +37,7 @@ export default () => {
       return sumAmount
     }),
     toJS () {
-      return this.invoices.map((g) => ({
-        id: g.id,
-        amount: g.amount,
-        amountCZK: g.amountCZK,
-        date: g.date
-      }))
+      return this.invoices.map((g) => g.toJS())
     }
   })
 }

@@ -1,4 +1,4 @@
-import { observable, action, toJS } from 'mobx'
+import { observable, action } from 'mobx'
 import Invoice from './invoice.js'
 import Fee from './fee.js'
 import Gumroad from './gumroad.js'
@@ -36,10 +36,10 @@ export class Store {
         body: JSON.stringify({
           gumroad: this.gumroad.toJS(),
           fee: this.fee.toJS(),
-          peru: toJS(this.peru),
-          invoicesCZ: this.invoicesCZ.toJS(),
-          invoicesUS: this.invoicesUS.toJS(),
-          invoicesEU: this.invoicesEU.toJS()
+          peru: this.peru.toJS(),
+          invoicesCZ: this.invoicesCZ.map(i => i.toJS()),
+          invoicesUS: this.invoicesUS.map(i => i.toJS()),
+          invoicesEU: this.invoicesEU.map(i => i.toJS())
         })
       })
 
@@ -50,8 +50,8 @@ export class Store {
       this.gumroad = Gumroad()
       this.fee = Fee(() => this.gumroad.incomes)
       this.peru = Invoice()
-      this.invoicesUS = []
-      this.invoicesCZ = []
+      this.invoicesUS = [this.peru]
+      this.invoicesCZ = [this.fee]
       this.invoicesEU = []
     }
 }
