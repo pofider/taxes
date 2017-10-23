@@ -18,7 +18,7 @@ export default observer(({ invoices, add }) => <div>
       <label>DIC</label>
       <input type='text' style={{color: 'red'}} value={i.dic} onChange={(ev) => i.updateDIC(ev.target.value)} />
       <label>CZK</label>
-      <input type='text' style={{color: 'red'}} value={i.amountStrCZK} onChange={(ev) => i.updateAmountCZK(ev.target.value)} />
+      <input type='text' style={{color: 'red'}} onChange={(ev) => i.updateAmountCZK(ev.target.value)} />
     </div>
   )}
   <button onClick={add}>Add invoice</button>

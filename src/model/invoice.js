@@ -10,9 +10,6 @@ function safeParse (str) {
 }
 
 export default (id, date) => ({
-  amountStrCZK: '0',
-  amountStrUSD: '0',
-  amountStrEUR: '0',
   dateStr: formatCZDate(date || new Date()),
   amountCZK: 0,
   amountUSD: 0,
@@ -22,17 +19,14 @@ export default (id, date) => ({
   id: id,
 
   updateAmountUSD (amount) {
-    this.amountStrUSD = amount
     this.amountUSD = safeParse(amount)
     conversion(this)
   },
   updateAmountEUR (amount) {
-    this.amountStrEUR = amount
     this.amountEUR = safeParse(amount)
     conversion(this)
   },
   updateAmountCZK (amount) {
-    this.amountStrCZK = amount
     this.amountCZK = safeParse(amount)
   },
   updateDIC (dic) {
