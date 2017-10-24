@@ -7,13 +7,13 @@ export default observer(({ invoices, add }) => <div>
     <small>Invoice for authors fee (previous one)</small>
   </div>
   {<div>
-    <label>Id</label>
-    <input type='text' value={invoices[0].id} onChange={(ev) => (invoices[0].id = ev.target.value)} />
-    <label>Date</label>
+    <label style={{color: 'red'}}>Id</label>
+    <input type='text' style={{color: 'red'}} value={invoices[0].id} onChange={(ev) => (invoices[0].id = ev.target.value)} />
+    <label style={{color: 'red'}}>Date</label>
     <input type='text' style={{color: 'red'}} onChange={(ev) => invoices[0].updateDate(ev.target.value)} />
-    <label>DIC</label>
+    <label style={{color: 'red'}}>DIC</label>
     <input disabled type='text' value={invoices[0].dic} />
-    <label>CZK</label>
+    <label style={{color: 'red'}}>CZK</label>
     <input type='text' style={{color: 'red'}} onChange={(ev) => invoices[0].updateAmountCZK(ev.target.value)} />
   </div>}
   <div>
@@ -21,13 +21,13 @@ export default observer(({ invoices, add }) => <div>
   </div>
   {invoices.slice(1).map((i) =>
     <div>
-      <label>Id</label>
+      <label style={{color: 'red'}}>Id</label>
       <input type='text' value={i.id} onChange={(ev) => (i.id = ev.target.value)} />
-      <label>Date</label>
+      <label style={{color: 'red'}}>Date</label>
       <input type='text' style={{color: 'red'}} onChange={(ev) => i.updateDate(ev.target.value)} />
-      <label>DIC</label>
+      <label style={{color: 'red'}}>DIC</label>
       <input type='text' style={{color: 'red'}} value={i.dic} onChange={(ev) => i.updateDIC(ev.target.value)} />
-      <label>CZK</label>
+      <label style={{color: 'red'}}>CZK</label>
       <input type='text' style={{color: 'red'}} onChange={(ev) => i.updateAmountCZK(ev.target.value)} />
     </div>
   )}

@@ -57,7 +57,7 @@ export class Store {
       this.invoicesUS = [this.peru]
 
       const invoiceForPreviousFee = new Invoice()
-      invoiceForPreviousFee.dic = '8501274529'
+      invoiceForPreviousFee.dic = 'CZ8501274529'
       this.invoicesCZ = [invoiceForPreviousFee]
       this.invoicesEU = []
     }

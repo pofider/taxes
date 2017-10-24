@@ -12,7 +12,7 @@ export default observer(({ invoices, add }) => <div>
   </div>}
   {invoices.slice(1).map((i) =>
     <div>
-      <label>Date</label>
+      <label style={{color: 'red'}}>Date</label>
       <input type='text' style={{color: 'red'}} onChange={(ev) => i.updateDate(ev.target.value)} />
       <label>CZK</label>
       <input disabled type='text' value={i.amountCZK} />

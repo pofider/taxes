@@ -8,7 +8,7 @@ export default (getSum) => Object.assign(Invoice(), {
   amountStrCZK: computed(function () {
     return Math.round(getSum() * 0.23) + ''
   }),
-  dic: '8501274529',
+  dic: 'CZ8501274529',
   toJS () {
     return {
       amountCZK: this.amountCZK,
