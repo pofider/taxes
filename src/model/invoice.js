@@ -10,7 +10,6 @@ function safeParse (str) {
 }
 
 export default (id, date) => ({
-  dateStr: formatCZDate(date || new Date()),
   amountCZK: 0,
   amountUSD: 0,
   amountEUR: 0,
@@ -33,8 +32,6 @@ export default (id, date) => ({
     this.dic = dic
   },
   updateDate (date) {
-    this.dateStr = date
-
     try {
       const fragments = date.split('.')
       this.date = new Date(parseInt(fragments[2]), parseInt(fragments[1]) - 1, parseInt(fragments[0]))

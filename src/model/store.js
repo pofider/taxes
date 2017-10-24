@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import Invoice from './invoice.js'
 import Fee from './fee.js'
 import Gumroad from './gumroad.js'
+import fileSaver from 'filesaver.js-npm'
 
 export class Store {
     @observable gumroad
@@ -43,7 +44,10 @@ export class Store {
         })
       })
 
-      alert((await res.text()))
+      const blob = await res.blob()
+      fileSaver.saveAs(blob, 'taxes.zip')
+
+      alert('Done')
     }
 
     constructor () {
@@ -51,7 +55,10 @@ export class Store {
       this.fee = Fee(() => this.gumroad.incomes)
       this.peru = Invoice()
       this.invoicesUS = [this.peru]
-      this.invoicesCZ = [this.fee]
+
+      const invoiceForPreviousFee = new Invoice()
+      invoiceForPreviousFee.dic = '8501274529'
+      this.invoicesCZ = [invoiceForPreviousFee]
       this.invoicesEU = []
     }
 }
