@@ -13,4 +13,5 @@ export default async function (obj) {
   const quotation = await response.json()
   cache[obj.date + currency] = quotation
   obj.amountCZK = parseFloat((quotation * obj['amount' + currency]).toFixed(2))
+  console.log('conversion to ', obj.amountCZK)
 }

@@ -26,7 +26,9 @@ export default (id, date) => ({
     conversion(this)
   },
   updateAmountCZK (amount) {
+    console.log('update amount CZK', amount)
     this.amountCZK = safeParse(amount)
+    console.log('updated to ', this.amountCZK)
   },
   updateDIC (dic) {
     this.dic = dic
