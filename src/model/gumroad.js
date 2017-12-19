@@ -18,6 +18,7 @@ export default () => {
 
   let accountingMonthEnd = new Date()
   accountingMonthEnd.setDate(1)
+  accountingMonthEnd.setHours(0, 0, 0, 0)
 
   while (addDays(date, 7 * counter) < accountingMonthEnd) {
     invoices.push(Invoice(`${accountingMonthStart.getFullYear()}-${counter + 1}G`, addDays(date, 7 * counter)))
