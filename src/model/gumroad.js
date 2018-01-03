@@ -8,6 +8,7 @@ export default () => {
   let accountingMonthStart = new Date()
   accountingMonthStart.setDate(1)
   accountingMonthStart.setMonth(accountingMonthStart.getMonth() - 1)
+  accountingMonthStart.setHours(0, 0, 0, 0)
 
   let date = new Date(initialDate)
 
